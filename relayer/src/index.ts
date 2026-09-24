@@ -21,6 +21,10 @@ async function main() {
 
   // 1) attest from Source A (Chainlink REST or Yahoo fallback)
   const a = (await sourceChainlink("TSLA")) ?? (await sourceYahoo("TSLA"));
+  // Fail CLOSED: never attest a missing/zero/NaN price on-chain (it would be slashable + break consumers).
+  if (!a || !Number.isFinite(a.price) || a.price <= 0) {
+    throw new Error("Source A unavailable or returned an invalid price — refusing to attest (fail-closed)");
+  }
   const expiry = Math.floor(Date.now() / 1000) + 86400;
   await (await verita.attest(WTSLAX, to8dp(a.price), a.status, expiry)).wait();
 

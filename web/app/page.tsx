@@ -1,7 +1,8 @@
 // File: web/app/page.tsx
 "use client";
 import { useEffect, useState } from "react";
-import { verita, STATUS } from "../lib/verita";
+import { formatUnits } from "ethers";
+import { verita, settlementToken, STATUS } from "../lib/verita";
 import { readHealthBps } from "../lib/positions";
 
 const BORROWER = process.env.NEXT_PUBLIC_BORROWER_ADDR!;
@@ -9,21 +10,23 @@ const WTSLAX = process.env.NEXT_PUBLIC_WTSLAX!;
 
 type View = {
   price: string; status: number; diverged: boolean;
-  tradeable: boolean; feePot: string; healthBps: string;
+  tradeable: boolean; feePot: string; feeSymbol: string; healthBps: string;
 };
 
 async function load(): Promise<View> {
   const v = verita();
   const a = await v.attestations(WTSLAX);            // [price,status,timestamp,expiry,attester,diverged]
   const tradeable = await v.isTradeable(WTSLAX);
-  const feePot = await v.feePot();
+  const feePot: bigint = await v.feePot();
   const healthBps = await readHealthBps(BORROWER);
+  const tok = await settlementToken();               // real decimals/symbol (WOKB live, USDG designed-for)
   return {
-    price: (Number(a.price) / 1e8).toFixed(2),
+    price: (Number(a.price) / 1e8).toFixed(2),        // price is always 8dp, independent of the money token
     status: Number(a.status),
     diverged: a.diverged,
     tradeable,
-    feePot: (Number(feePot) / 1e6).toFixed(4),      // USDG 6dp
+    feePot: Number(formatUnits(feePot, tok.decimals)).toFixed(4),
+    feeSymbol: tok.symbol,
     healthBps: healthBps === 0n ? "—" : (Number(healthBps) / 100).toFixed(1) + "%",
   };
 }
@@ -92,13 +95,13 @@ export default function Home() {
               {safe ? "SAFE — mark accepted" : "REFUSED — mark rejected (unsafe)"}
             </strong>
           </div>
-          <div className="row"><span className="label">Per-read fees collected (feePot)</span><strong>{v.feePot} USDG</strong></div>
+          <div className="row"><span className="label">Per-read fees collected (feePot)</span><strong>{v.feePot} {v.feeSymbol}</strong></div>
         </div>
       </section>
 
       <section className="card">
         <h2>Run the kill-shot</h2>
-        <p className="muted">Submit an independent signed report that proves the attester lied. If it does, their staked USDG is slashed to the harmed borrower — on-chain, no keys on your machine.</p>
+        <p className="muted">Submit an independent signed report that proves the attester lied. If it does, their staked collateral is slashed to the harmed borrower — on-chain, no keys on your machine.</p>
         <button onClick={killShot} disabled={killing} className="btn">
           {killing ? "Running…" : "Run the kill-shot"}
         </button>
@@ -110,7 +113,7 @@ export default function Home() {
         <summary>Technical detail</summary>
         <p className="muted">Prices/status enter via authorized EIP-712 ReporterReports. A within-band report cannot slash; an
         independent report proving &gt;0.5% divergence (or a status contradiction) slashes the attester&apos;s staked
-        USDG to the harmed borrower. We never call the dead on-chain Chainlink verifier.</p>
+        collateral to the harmed borrower. We never call the dead on-chain Chainlink verifier.</p>
       </details>
 
       <p className="footlink"><a href="/proof">On-chain proof →</a></p>

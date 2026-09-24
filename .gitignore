@@ -20,7 +20,11 @@ DESIGN_BRIEF.md
 USER-ONBOARDING.md
 concerns.md
 BUILD-REPORT.md
+DEBUG-REPORT.md
+debug-results/
+.gas-snapshot
 .build-state.json
+.debug-state.json
 .forge-state.json
 .input-manifest.json
 .env.example

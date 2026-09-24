@@ -1,7 +1,10 @@
 // File: web/app/proof/page.tsx
 const V = process.env.NEXT_PUBLIC_VERITA || "";
 const G = process.env.NEXT_PUBLIC_GUARD || "";
+// USDG is the designed-for settlement token; the live mainnet proof settled in WOKB (AMEND-3).
+// The re-resolve command derives the ACTUAL settlement token from the contract so it is never wrong.
 const USDG = "0x4ae46a509F6b1D9056937BA4500cb143933D2dc8";
+const WOKB = "0xe538905cf8410324e03A5A23C1c177a474D59b2b";
 const WTSLAX = "0xc3FdBe3A68EE5dE461D30415a8165cf9Aefe1171";
 const ok = (a: string) => `https://www.oklink.com/xlayer/address/${a}`;
 
@@ -13,7 +16,9 @@ function Addr({ label, a }: { label: string; a: string }) {
 export default function Proof() {
   const reResolve =
 `cast logs --address ${V || "<VERITA>"} "Slashed(address,address,address,uint256,string)" --rpc-url https://rpc.xlayer.tech
-cast call ${USDG} "balanceOf(address)(uint256)" <BORROWER> --rpc-url https://rpc.xlayer.tech`;
+# settlement token is a constructor param — read it from the contract, then confirm the borrower received the slash:
+TOKEN=$(cast call ${V || "<VERITA>"} "USDG()(address)" --rpc-url https://rpc.xlayer.tech)
+cast call $TOKEN "balanceOf(address)(uint256)" <BORROWER> --rpc-url https://rpc.xlayer.tech`;
   return (
     <main className="wrap">
       <header className="hero">
@@ -26,7 +31,8 @@ cast call ${USDG} "balanceOf(address)(uint256)" <BORROWER> --rpc-url https://rpc
         <ul className="list">
           <Addr label="Verita" a={V} />
           <Addr label="LiquidationGuard" a={G} />
-          <Addr label="USDG (6dp)" a={USDG} />
+          <Addr label="WOKB — live settlement token (18dp, AMEND-3)" a={WOKB} />
+          <Addr label="USDG — designed-for settlement token (6dp)" a={USDG} />
           <Addr label="wTSLAx" a={WTSLAX} />
           <li>Chainlink VerifierProxy (DEAD — reverts VerifierNotFound; we never call it): <code>0xcE73c8ad08CBDEaCa6078BF0627C8fe0a9a536E7</code></li>
         </ul>

@@ -6,24 +6,35 @@ import { JsonRpcProvider, Wallet, Contract } from "ethers";
 let lastCall = 0;
 export async function POST() {
   const now = Date.now();
-  if (now - lastCall < 30_000) return NextResponse.json({ error: "rate limited" }, { status: 429 });
+  if (now - lastCall < 30_000) return NextResponse.json({ error: "rate limited — wait 30s between kill-shots" }, { status: 429 });
   lastCall = now;
-  const provider = new JsonRpcProvider("https://rpc.xlayer.tech");
-  const relayer = new Wallet(process.env.RELAYER_PK!, provider); // demo key, small funded amount
-  const verita = new Contract(process.env.NEXT_PUBLIC_VERITA!, ["function challenge(address,(address,uint256,uint8,uint64,uint256,bytes))"], relayer);
-  // Load the independent signed report (live from Source B, or the disclosed pre-seeded report).
-  // CRITICAL: coerce the large numeric fields to BigInt — price/timestampNs/nonce exceed 2^53 and
-  // JSON.parse would silently lose precision, changing the digest and reverting NotAReporter.
-  const j = JSON.parse(process.env.KILLSHOT_REPORT_JSON!);
-  const report = {
-    asset: j.asset,
-    price: BigInt(j.price),
-    status: Number(j.status),
-    timestampNs: BigInt(j.timestampNs),
-    nonce: BigInt(j.nonce),
-    sig: j.sig,
-  };
-  const tx = await verita.challenge(process.env.NEXT_PUBLIC_WTSLAX!, report);
-  const rcpt = await tx.wait();
-  return NextResponse.json({ txHash: rcpt.hash });
+  try {
+    // Fail closed on missing config rather than throwing a raw 500 the client can't parse.
+    if (!process.env.RELAYER_PK || !process.env.NEXT_PUBLIC_VERITA || !process.env.KILLSHOT_REPORT_JSON || !process.env.NEXT_PUBLIC_WTSLAX) {
+      return NextResponse.json({ error: "kill-shot not configured on this host (missing relayer key or signed report)" }, { status: 503 });
+    }
+    const provider = new JsonRpcProvider("https://rpc.xlayer.tech");
+    const relayer = new Wallet(process.env.RELAYER_PK, provider); // demo key, small funded amount
+    const verita = new Contract(process.env.NEXT_PUBLIC_VERITA, ["function challenge(address,(address,uint256,uint8,uint64,uint256,bytes))"], relayer);
+    // Load the independent signed report (live from Source B, or the disclosed pre-seeded report).
+    // CRITICAL: coerce the large numeric fields to BigInt — price/timestampNs/nonce exceed 2^53 and
+    // JSON.parse would silently lose precision, changing the digest and reverting NotAReporter.
+    const j = JSON.parse(process.env.KILLSHOT_REPORT_JSON);
+    const report = {
+      asset: j.asset,
+      price: BigInt(j.price),
+      status: Number(j.status),
+      timestampNs: BigInt(j.timestampNs),
+      nonce: BigInt(j.nonce),
+      sig: j.sig,
+    };
+    const tx = await verita.challenge(process.env.NEXT_PUBLIC_WTSLAX, report);
+    const rcpt = await tx.wait();
+    return NextResponse.json({ txHash: rcpt.hash });
+  } catch (e: any) {
+    // Common on-chain reasons: asset already latched diverged (NoDivergence/replay), relayer out of gas,
+    // report expired. Always return JSON so the client's r.json() never throws SyntaxError on a raw 500.
+    const reason = e?.shortMessage || e?.reason || e?.message || "kill-shot reverted on-chain";
+    return NextResponse.json({ error: String(reason) }, { status: 502 });
+  }
 }
