@@ -1,0 +1,8 @@
+{
+  "name": "verita-relayer",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node --loader ts-node/esm src/index.ts" },
+  "dependencies": { "ethers": "^6.13.0" },
+  "devDependencies": { "ts-node": "^10.9.2", "typescript": "^5.5.0" }
+}
