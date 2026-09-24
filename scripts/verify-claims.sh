@@ -3,14 +3,17 @@
 # Refuses read-back-only: recomputes slash amount + prevented-loss from committed inputs.
 set -euo pipefail
 RPC=https://rpc.xlayer.tech
-: "${VERITA:?}" "${GUARD:?}" "${BORROWER:?}" "${WTSLAX:=0xc3FdBe3A68EE5dE461D30415a8165cf9Aefe1171}"
-USDG=0x4ae46a509F6b1D9056937BA4500cb143933D2dc8
+: "${VERITA:?}" "${BORROWER:?}" "${WTSLAX:=0xc3FdBe3A68EE5dE461D30415a8165cf9Aefe1171}"
+: "${FROM_BLOCK:=71514150}" "${TO_BLOCK:=71514160}"
+# settlement token is derived from the contract (WOKB on the live mainnet proof; USDG by design)
+TOKEN=$(cast call "$VERITA" "USDG()(address)" --rpc-url $RPC)
+echo "settlement token (from contract): $TOKEN"
 
 echo "== Slashed events (public) =="
-cast logs --address "$VERITA" "Slashed(address,address,address,uint256,string)" --rpc-url $RPC
+cast logs --address "$VERITA" "Slashed(address,address,address,uint256,string)" --from-block $FROM_BLOCK --to-block $TO_BLOCK --rpc-url $RPC
 
-echo "== borrower USDG balance (recomputed prevented-loss recipient) =="
-cast call $USDG "balanceOf(address)(uint256)" "$BORROWER" --rpc-url $RPC
+echo "== borrower balance in the settlement token (slashed value received) =="
+cast call "$TOKEN" "balanceOf(address)(uint256)" "$BORROWER" --rpc-url $RPC
 
 echo "== feePot (per-read fees collected) =="
 cast call "$VERITA" "feePot()(uint256)" --rpc-url $RPC
