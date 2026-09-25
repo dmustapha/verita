@@ -53,3 +53,8 @@ PERSPECTIVE-RESPONSE-design.rejected.diag.txt
 PERSPECTIVE-RESPONSE-design-canary.rejected.json
 PERSPECTIVE-RESPONSE-design-canary.rejected.diag.txt
 web/tsconfig.tsbuildinfo
+
+# Deploy tooling state (internal)
+.ship-check.json
+.deploy-state.json
+web/.env.local.bak.*

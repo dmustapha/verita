@@ -3,8 +3,10 @@
 # Refuses read-back-only: recomputes slash amount + prevented-loss from committed inputs.
 set -euo pipefail
 RPC=https://rpc.xlayer.tech
-: "${VERITA:?}" "${BORROWER:?}" "${WTSLAX:=0xc3FdBe3A68EE5dE461D30415a8165cf9Aefe1171}"
-: "${FROM_BLOCK:=71514150}" "${TO_BLOCK:=71514160}"
+# Defaults are the LIVE deployed values on X Layer 196, so this runs cold with zero setup.
+: "${VERITA:=0xF3d0E2768F43062b532b3d4bb63c155238FA9176}" "${BORROWER:=0x184a985e244BB070D4F58872B742896fdcc46a98}" "${WTSLAX:=0xc3FdBe3A68EE5dE461D30415a8165cf9Aefe1171}"
+# window around a real slash (X Layer getLogs caps at 100 blocks per call)
+: "${FROM_BLOCK:=71536900}" "${TO_BLOCK:=71536980}"
 # settlement token is derived from the contract (WOKB on the live mainnet proof; USDG by design)
 TOKEN=$(cast call "$VERITA" "USDG()(address)" --rpc-url $RPC)
 echo "settlement token (from contract): $TOKEN"
