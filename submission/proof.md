@@ -41,6 +41,31 @@ cast call 0xF3d0E2768F43062b532b3d4bb63c155238FA9176 "safePrice(address)(uint256
 # → reverts 0xefac79d8 (Diverged)
 ```
 
+## The MARKET-STATUS moat — proven live (CO-S1 / F-019, change-order v1.5)
+Every slash above is **price-divergence**. Verita's differentiator is that it also slashes a **market-STATUS** lie — a halt/split/de-peg the attester denies — which no price feed can carry. Proven live on public 196 for the first time here: the attester posted `wNVDAx` **REGULAR at the true price $224.58**; an authorized reporter signed a **HALTED** report at the **same price** (ZERO price divergence); `challenge()` slashed on `statusContradicts`.
+
+| Step | What | Tx hash |
+|------|------|---------|
+| Stake + Attest | DEPLOYER stakes 0.005 WOKB, attests wNVDAx **REGULAR** @ $224.58 | `0xd078d3d4c8b6ff69ebd0e0b2714d2a5e0c1ce0b5cc46c0ebbce8f90bd6715fd4` |
+| **Challenge → SLASH (STATUS)** | REPORTER-signed **HALTED** report at the same $224.58 → 0.005 WOKB slashed to the harmed borrower; reason `status-contradiction`, NOT price-divergence | `0x9a1ba59b9cf4b17fe7d8ec2a19b0352284ebcb53eb175c2383326c78fbcf6afc` |
+
+Asset `wNVDAx` `0xa8ddb5Cd96b5222AFe198316E9A57CAA642850D5` · beneficiary BORROWER `0x184a985e244BB070D4F58872B742896fdcc46a98`.
+
+### Re-resolve it yourself — assert the reason is `status-contradiction` (zero price divergence)
+```bash
+# receipt is status 1:
+cast receipt 0x9a1ba59b9cf4b17fe7d8ec2a19b0352284ebcb53eb175c2383326c78fbcf6afc \
+  --rpc-url https://rpc.xlayer.tech | grep -i "status"
+# → status  1 (success)
+
+# decode the Slashed event — reason must be "status-contradiction" (NOT "price-divergence"):
+cast receipt 0x9a1ba59b9cf4b17fe7d8ec2a19b0352284ebcb53eb175c2383326c78fbcf6afc \
+  --rpc-url https://rpc.xlayer.tech --json \
+  | python3 -c 'import sys,json; print(json.load(sys.stdin)["logs"][-1]["data"])'
+# the trailing ABI-encoded string decodes to: status-contradiction
+```
+Reproduce end-to-end: `cd web && node scripts/status-contradiction.mjs` (stakes, attests REGULAR, signs a HALTED report at the same price, challenges — fires a fresh status slash on 196).
+
 ## Consumer beat (wrongful-liquidation refusal, F-008)
 Demonstrated by the green test suite (`test_BorrowThenLiquidateRefusedOnHalt`) and on a mainnet-fork with dust wTSLAx dealt to the borrower — because wTSLAx has no retail liquidity on X Layer (issuer-KYC mint-on-deposit wrapper). See LIMITATIONS. The primitive's HERO slash above is on public mainnet.
 
