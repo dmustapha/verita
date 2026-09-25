@@ -15,7 +15,9 @@ export async function POST() {
     }
     const provider = new JsonRpcProvider("https://rpc.xlayer.tech");
     const relayer = new Wallet(process.env.RELAYER_PK, provider); // demo key, small funded amount
-    const verita = new Contract(process.env.NEXT_PUBLIC_VERITA, ["function challenge(address,(address,uint256,uint8,uint64,uint256,bytes))"], relayer);
+    // NOTE: tuple components MUST be named — ethers rejects an object arg against an unnamed tuple ABI
+    // ("cannot use object value with unnamed components"). Named components let us pass the report object.
+    const verita = new Contract(process.env.NEXT_PUBLIC_VERITA, ["function challenge(address asset,(address asset,uint256 price,uint8 status,uint64 timestampNs,uint256 nonce,bytes sig) report)"], relayer);
     // Load the independent signed report (live from Source B, or the disclosed pre-seeded report).
     // CRITICAL: coerce the large numeric fields to BigInt — price/timestampNs/nonce exceed 2^53 and
     // JSON.parse would silently lose precision, changing the digest and reverting NotAReporter.

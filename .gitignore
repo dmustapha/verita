@@ -31,3 +31,7 @@ debug-results/
 research/
 warroom/
 docs/pipeline/
+
+# wire internal artifacts
+WIRE-REPORT.md
+.wire-state.json

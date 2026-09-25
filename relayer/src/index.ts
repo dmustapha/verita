@@ -1,14 +1,15 @@
 // File: relayer/src/index.ts
 import { JsonRpcProvider, Wallet, Contract } from "ethers";
-import { sourceChainlink, sourceYahoo, sourceB } from "./sources";
-import { signReport } from "./sign";
+import { sourceChainlink, sourceYahoo, sourceB } from "./sources.js";
+import { signReport } from "./sign.js";
 
 const RPC = "https://rpc.xlayer.tech";
 const VERITA = process.env.VERITA!;
 const WTSLAX = process.env.WTSLAX!;
 const ABI = [
   "function attest(address,uint256,uint8,uint64)",
-  "function challenge(address,(address,uint256,uint8,uint64,uint256,bytes))",
+  // named tuple components required — ethers rejects an object arg against an unnamed tuple ABI
+  "function challenge(address asset,(address asset,uint256 price,uint8 status,uint64 timestampNs,uint256 nonce,bytes sig) report)",
 ];
 
 const to8dp = (usd: number) => BigInt(Math.round(usd * 1e8));
