@@ -69,3 +69,8 @@ TESTING-PLAN.md
 
 .DS_Store
 **/.DS_Store
+
+# demo staging (internal)
+DEMO-SCRIPT.md
+DEMO-FOOTGUNS.md
+.demo-rehearsal-state.json
