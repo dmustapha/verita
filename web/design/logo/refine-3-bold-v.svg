@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Verita">
+  <path d="M12 14 L30 50" stroke="#6bd08a" stroke-width="9" stroke-linecap="round"/>
+  <path d="M52 14 L30 50" stroke="#ff6a5f" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="30" cy="50" r="7" fill="#2dd4bf"/>
+</svg>

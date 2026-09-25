@@ -58,7 +58,14 @@ function AppBar() {
   }, []);
   return (
     <header className="bar">
-      <div className="wordmark"><span className="dot" />Verita</div>
+      <div className="wordmark">
+        <svg className="mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M9 15 H18 L33 48 L26 48 Z" fill="#6bd08a" />
+          <path d="M55 15 H46 L31 48 L38 48 Z" fill="#ff6a5f" />
+          <circle cx="32" cy="48" r="6.5" fill="#2dd4bf" />
+        </svg>
+        Verita
+      </div>
       <span className="pill"><span className="b" />X Layer · 196</span>
       <span className={"block-tick" + (ticked ? " tick" : "")}>
         #{block === null ? "—" : block.toLocaleString("en-US").replace(/,/g, "")}

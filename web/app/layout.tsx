@@ -2,9 +2,25 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Verita — the record of who lied",
+  title: "Verita: the record of who lied",
   description:
-    "A staked oracle on X Layer 196. Lie about a price, lose your stake — attested marks, a live liquidation guard, and on-chain slashing you can re-resolve yourself.",
+    "A staked oracle on X Layer 196. Lie about a price, lose your stake: attested marks, a live liquidation guard, and on-chain slashing you can re-resolve yourself.",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-touch-icon.png",
+  },
+  openGraph: {
+    title: "Verita: staked accountability for tokenized-equity prices",
+    description: "Lie about a price, lose your stake. Live on X Layer 196.",
+    images: ["/og-image.png"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Verita: staked accountability for tokenized-equity prices",
+    description: "Lie about a price, lose your stake. Live on X Layer 196.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

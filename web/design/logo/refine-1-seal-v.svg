@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Verita">
+  <defs><clipPath id="sq"><rect x="6" y="6" width="52" height="52" rx="14"/></clipPath></defs>
+  <g clip-path="url(#sq)">
+    <rect x="6" y="6" width="52" height="52" fill="#2dd4bf"/>
+    <!-- V carved as ink negative space -->
+    <path d="M18 20 L32 46 L46 20" fill="none" stroke="#07100f" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- left arm tip: SAFE green -->
+    <circle cx="18" cy="20" r="4.6" fill="#6bd08a"/>
+    <!-- right arm tip: REFUSED red -->
+    <circle cx="46" cy="20" r="4.6" fill="#ff6a5f"/>
+  </g>
+</svg>

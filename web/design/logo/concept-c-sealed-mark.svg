@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Verita concept C">
+  <title>Concept C — Sealed mark: a stamped seal of truth with a slashed corner</title>
+  <defs>
+    <clipPath id="sealC"><path d="M14 6 H44 L58 20 V50 a8 8 0 0 1 -8 8 H14 a8 8 0 0 1 -8 -8 V14 a8 8 0 0 1 8 -8 Z"/></clipPath>
+  </defs>
+  <!-- filled seal body, teal, with a slashed top-right corner -->
+  <g clip-path="url(#sealC)">
+    <rect x="0" y="0" width="64" height="64" fill="#2dd4bf"/>
+    <!-- the slashed corner edge, red -->
+    <path d="M44 6 L58 20 L44 20 Z" fill="#ff6a5f"/>
+  </g>
+  <!-- verified tick punched out of the seal (ink negative space) -->
+  <path d="M19 33 l8 9 L45 22" fill="none" stroke="#07100f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

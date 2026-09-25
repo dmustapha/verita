@@ -66,3 +66,6 @@ LIVETEST-V3-REPORT.md
 .livetest-state.json
 screenshots/
 TESTING-PLAN.md
+
+.DS_Store
+**/.DS_Store

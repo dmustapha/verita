@@ -88,6 +88,22 @@ uint256 price = verita.safePrice(asset);               // reverts on unsafe, els
 
 The reference consumer, [`LiquidationGuard.sol`](src/LiquidationGuard.sol), calls `safePrice()` on every borrow and liquidation. When Verita refuses the mark the liquidation reverts (`LiquidationGuard.sol:63`), so a wrongful liquidation on a frozen mark is impossible.
 
+**Off-chain / JS integrators** (agents, backends, frontends): use the published ABI at [`abi/IVerita.json`](abi/IVerita.json) against the live address, no build step required:
+
+```ts
+import { Contract, JsonRpcProvider } from "ethers";
+import IVeritaAbi from "./abi/IVerita.json";
+
+const verita = new Contract(
+  "0xF3d0E2768F43062b532b3d4bb63c155238FA9176",
+  IVeritaAbi,
+  new JsonRpcProvider("https://rpc.xlayer.tech")
+);
+const safe = await verita.isTradeable(asset); // free view
+```
+
+The full contract ABI is at [`abi/Verita.json`](abi/Verita.json).
+
 ## Security architecture
 
 | Layer | Mechanism | Enforcement point |

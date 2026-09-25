@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Verita concept B">
+  <title>Concept B — Verdict V: the V of Verita, one arm verifies (green), one arm slashes (red)</title>
+  <!-- left arm: the SAFE up-check, green -->
+  <path d="M12 20 L30 46 L26 52 L6 24 Z" fill="#6bd08a"/>
+  <!-- right arm: the REFUSED slash, red -->
+  <path d="M52 16 L30 46 L26 52 L48 12 Z" fill="#ff6a5f"/>
+  <!-- vertex node: the stake at risk, teal -->
+  <circle cx="29" cy="49" r="5.5" fill="#2dd4bf"/>
+</svg>
