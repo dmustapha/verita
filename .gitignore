@@ -8,7 +8,7 @@ _scrapped-attempts/
 *.log
 web/.next/
 
-# TIER-3 internal / pipeline docs (provenance-clean from commit 1 — never tracked)
+# Local planning + working notes (not part of the published product)
 PRD.md
 PLAN.md
 ARCHITECTURE.md
@@ -32,16 +32,14 @@ research/
 warroom/
 docs/pipeline/
 
-# wire internal artifacts
+# Local reports + generated state
 WIRE-REPORT.md
 .wire-state.json
-
-# verify_milestone internal artifacts
 VERIFY-REPORT.md
 .verify-state.json
 VERIFY-OBSERVABLE-EVIDENCE.json
 
-# Stage 4 design-iteration internals (TIER-3, never tracked)
+# Design working files
 ai/
 proposals/
 design-variations/

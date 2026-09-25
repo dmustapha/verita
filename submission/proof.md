@@ -1,6 +1,6 @@
-# On-Chain Proof — Verita (X Layer mainnet, chain 196)
+# On-Chain Proof, Verita (X Layer mainnet, chain 196)
 
-The organic-divergence slash, proven on **public** X Layer mainnet. Settlement token for the live proof is **WOKB** (`0xe538905cf8410324e03A5A23C1c177a474D59b2b`) — see LIMITATIONS (USDG is dormant on X Layer / no retail liquidity; USDG remains the designed-for token used in the test suite + fork consumer demo).
+The organic-divergence slash, proven on **public** X Layer mainnet. Settlement token for the live proof is **WOKB** (`0xe538905cf8410324e03A5A23C1c177a474D59b2b`), see LIMITATIONS (USDG is dormant on X Layer / no retail liquidity; USDG remains the designed-for token used in the test suite + fork consumer demo).
 
 ## Deployed
 | Contract | Address | Explorer |
@@ -9,7 +9,7 @@ The organic-divergence slash, proven on **public** X Layer mainnet. Settlement t
 
 Config: settlement token WOKB · `minStake` 0.005 WOKB · `perReadFee` 0.0005 WOKB · `divergenceBps` 50 (0.5%) · `maxAge` 300s · reporter `0x2454A6AFeE37c4dA93A9B1FC7BEb972C811D4189` (authorized) · slash beneficiary = BORROWER `0x184a985e244BB070D4F58872B742896fdcc46a98`.
 
-## The HERO flow — every tx on public 196
+## The HERO flow, every tx on public 196
 | Step | What | Tx hash |
 |------|------|---------|
 | Deploy | Verita(WOKB) + setReporter + registerBeneficiary(BORROWER) | `0x75b89902976811758cdff54d65e10a5f051073669c9528200ea272d790a172a9` |
@@ -19,10 +19,10 @@ Config: settlement token WOKB · `minStake` 0.005 WOKB · `perReadFee` 0.0005 WO
 
 ## What the slash proves (recomputable from public state)
 - **Real value moved:** BORROWER WOKB balance `0 → 0.005` (5e15 wei); ATTACKER `stakeOf` `0.005 → 0`.
-- **Organic trigger:** the on-chain `Slashed` event reason is `price-divergence` — the divergence between the attester's posted price and an independent EIP-712-signed report, not an operator/owner flip. No owner slash path exists.
-- **Circuit breaker latched:** post-slash `safePrice(wTSLAx)` reverts `Diverged()` (`0xefac79d8`) — a proven-wrong attester can no longer serve.
+- **Organic trigger:** the on-chain `Slashed` event reason is `price-divergence`, the divergence between the attester's posted price and an independent EIP-712-signed report, not an operator/owner flip. No owner slash path exists.
+- **Circuit breaker latched:** post-slash `safePrice(wTSLAx)` reverts `Diverged()` (`0xefac79d8`), a proven-wrong attester can no longer serve.
 
-## Re-resolve it yourself (public RPC, zero of our infra) — HERO-PROOF
+## Re-resolve it yourself (public RPC, zero of our infra), HERO-PROOF
 ```bash
 # 1) the slash event, straight from public X Layer 196:
 cast logs --address 0xF3d0E2768F43062b532b3d4bb63c155238FA9176 \
@@ -41,8 +41,8 @@ cast call 0xF3d0E2768F43062b532b3d4bb63c155238FA9176 "safePrice(address)(uint256
 # → reverts 0xefac79d8 (Diverged)
 ```
 
-## The MARKET-STATUS moat — proven live (CO-S1 / F-019, change-order v1.5)
-Every slash above is **price-divergence**. Verita's differentiator is that it also slashes a **market-STATUS** lie — a halt/split/de-peg the attester denies — which no price feed can carry. Proven live on public 196 for the first time here: the attester posted `wNVDAx` **REGULAR at the true price $224.58**; an authorized reporter signed a **HALTED** report at the **same price** (ZERO price divergence); `challenge()` slashed on `statusContradicts`.
+## The MARKET-STATUS moat, proven live (CO-S1 / F-019, change-order v1.5)
+Every slash above is **price-divergence**. Verita's differentiator is that it also slashes a **market-STATUS** lie, a halt/split/de-peg the attester denies, which no price feed can carry. Proven live on public 196 for the first time here: the attester posted `wNVDAx` **REGULAR at the true price $224.58**; an authorized reporter signed a **HALTED** report at the **same price** (ZERO price divergence); `challenge()` slashed on `statusContradicts`.
 
 | Step | What | Tx hash |
 |------|------|---------|
@@ -51,25 +51,25 @@ Every slash above is **price-divergence**. Verita's differentiator is that it al
 
 Asset `wNVDAx` `0xa8ddb5Cd96b5222AFe198316E9A57CAA642850D5` · beneficiary BORROWER `0x184a985e244BB070D4F58872B742896fdcc46a98`.
 
-### Re-resolve it yourself — assert the reason is `status-contradiction` (zero price divergence)
+### Re-resolve it yourself, assert the reason is `status-contradiction` (zero price divergence)
 ```bash
 # receipt is status 1:
 cast receipt 0x9a1ba59b9cf4b17fe7d8ec2a19b0352284ebcb53eb175c2383326c78fbcf6afc \
   --rpc-url https://rpc.xlayer.tech | grep -i "status"
 # → status  1 (success)
 
-# decode the Slashed event — reason must be "status-contradiction" (NOT "price-divergence"):
+# decode the Slashed event, reason must be "status-contradiction" (NOT "price-divergence"):
 cast receipt 0x9a1ba59b9cf4b17fe7d8ec2a19b0352284ebcb53eb175c2383326c78fbcf6afc \
   --rpc-url https://rpc.xlayer.tech --json \
   | python3 -c 'import sys,json; print(json.load(sys.stdin)["logs"][-1]["data"])'
 # the trailing ABI-encoded string decodes to: status-contradiction
 ```
-Reproduce end-to-end: `cd web && node scripts/status-contradiction.mjs` (stakes, attests REGULAR, signs a HALTED report at the same price, challenges — fires a fresh status slash on 196).
+Reproduce end-to-end: `cd web && node scripts/status-contradiction.mjs` (stakes, attests REGULAR, signs a HALTED report at the same price, challenges, fires a fresh status slash on 196).
 
 ## Consumer beat (wrongful-liquidation refusal, F-008)
-Demonstrated by the green test suite (`test_BorrowThenLiquidateRefusedOnHalt`) and on a mainnet-fork with dust wTSLAx dealt to the borrower — because wTSLAx has no retail liquidity on X Layer (issuer-KYC mint-on-deposit wrapper). See LIMITATIONS. The primitive's HERO slash above is on public mainnet.
+Demonstrated by the green test suite (`test_BorrowThenLiquidateRefusedOnHalt`) and on a mainnet-fork with dust wTSLAx dealt to the borrower, because wTSLAx has no retail liquidity on X Layer (issuer-KYC mint-on-deposit wrapper). See LIMITATIONS. The primitive's HERO slash above is on public mainnet.
 
-## External (non-team) reader — F-014
+## External (non-team) reader, F-014
 PENDING (try-else-disclose). One-line command for any non-team wallet to read the primitive:
 ```bash
 cast call 0xF3d0E2768F43062b532b3d4bb63c155238FA9176 "isTradeable(address)(bool)" \

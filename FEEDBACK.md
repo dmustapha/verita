@@ -1,8 +1,8 @@
-# Builder Feedback — X Layer / OKX (Verita, OKX Dev Day 2026)
+# Builder Feedback, X Layer / OKX (Verita, OKX Dev Day 2026)
 
 Real integration friction captured while building Verita directly against X Layer mainnet (chain 196),
 OKX's DEX aggregator, Backed xStocks, Paxos USDG, and Chainlink Data Streams. Every item below is
-falsifiable — it carries the exact address, error code, or command that reproduces it, plus a concrete fix.
+falsifiable, it carries the exact address, error code, or command that reproduces it, plus a concrete fix.
 This is not a wishlist; it is what actually cost build time on the stack.
 
 ## 1. Chainlink Data Streams on-chain `verify()` is dead on X Layer 196
@@ -42,7 +42,7 @@ This is not a wishlist; it is what actually cost build time on the stack.
   the Backed xStocks (wTSLAx `0xc3FdBe3A68EE5dE461D30415a8165cf9Aefe1171`, wNVDAx
   `0xa8ddb5Cd96b5222AFe198316E9A57CAA642850D5`) have live bytecode and correct `symbol()`s, but no public
   AMM pool and effectively zero retail transfer activity over tens of thousands of recent blocks. xStocks
-  are mint-on-deposit, issuer-KYC'd wrappers — a permissionless builder cannot obtain a test balance.
+  are mint-on-deposit, issuer-KYC'd wrappers, a permissionless builder cannot obtain a test balance.
 - **Reproduce:** `cast call 0xc3FdBe3A68EE5dE461D30415a8165cf9Aefe1171 "symbol()(string)" --rpc-url https://rpc.xlayer.tech`
   returns `wTSLAx`, but there is no swap route to acquire it and `balanceOf` for non-issuer addresses is 0.
 - **Impact:** The "tokenized stocks & RWA" track's headline assets cannot be held by a builder for a live
@@ -50,7 +50,7 @@ This is not a wishlist; it is what actually cost build time on the stack.
   on a mainnet fork + full test suite, disclosing the split honestly.
 - **Fix (for OKX/Backed/Paxos):** A hackathon-scoped faucet or a small seeded AMM pool for USDG + one or two
   xStocks on 196 would let teams demonstrate the exact RWA flows the track rewards, on mainnet, with real
-  assets — instead of forking or substituting.
+  assets, instead of forking or substituting.
 
 ## 4. OKLink contract verification friction
 
@@ -67,4 +67,4 @@ This is not a wishlist; it is what actually cost build time on the stack.
 ### Method note
 Items 1–3 are load-bearing: each one changed Verita's architecture or demo scope, and each is reproducible
 from a public RPC with the command shown. Item 4 is a developer-experience cost, not a design blocker.
-No vague filler is included by design — an unfalsifiable complaint costs credibility with judges.
+No vague filler is included by design, an unfalsifiable complaint costs credibility with judges.
