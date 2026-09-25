@@ -2,7 +2,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { formatUnits } from "ethers";
-import { verita, settlementToken, STATUS, provider } from "../lib/verita";
+import { verita, settlementToken, STATUS, provider, readPerReadFee } from "../lib/verita";
 import { readHealthBps } from "../lib/positions";
 import { readRegistry, RegistryRow } from "../lib/registry";
 import { readLedger, LedgerResult } from "../lib/ledger";
@@ -67,6 +67,8 @@ function AppBar() {
         <a href="#console">Console</a>
         <a href="#registry">Registry</a>
         <a href="#ledger">Ledger</a>
+        <a href="#developers">Developers</a>
+        <a href="#guarantees">Guarantees</a>
         <a href="/proof">Proof</a>
       </nav>
     </header>
@@ -242,6 +244,11 @@ function Registry() {
             </tbody>
           </table>
         </div>
+        <div className="legend">
+          <p><b>Status</b> — the market state the attester claimed: REGULAR / HALTED / SPLIT_PENDING / DEPEGGED / CLOSED …</p>
+          <p><b>Verdict / Diverged</b> — whether an independent report caught a lie and latched the circuit breaker.</p>
+          <p className="close">These are independent axes. An asset can read <b>REGULAR</b> in Status yet <b>Diverged</b> in Verdict — the attester claimed the market was open, but was caught and slashed.</p>
+        </div>
       </div>
     </section>
   );
@@ -303,6 +310,7 @@ function LedgerAndGuard() {
           <div className="kicker">Money moved · block by block</div>
           <h2>Stake / Slash Ledger &amp; live guard</h2>
           <p>Left: every slash the contract emitted, paid to the harmed borrower. Right: the consumer reading the mark to compute health.</p>
+          <p className="ledger-note">A slash can be triggered by a <b>price lie</b> (a mark that diverges past the band) <b>or a market-status lie</b> — a halt, split or de-peg that no price feed can carry. Each row&apos;s reason is decoded live from its receipt.</p>
         </div>
         <div className="split">
           {/* LEDGER */}
@@ -318,8 +326,10 @@ function LedgerAndGuard() {
             {ledger && ledger.ok && ledger.rows.length === 0 && (
               <div className="empty">No <b>Slashed</b> events resolved yet.</div>
             )}
-            {ledger && ledger.ok && ledger.rows.map((r) => (
-              <div className="event" key={r.txHash + r.beneficiary}>
+            {ledger && ledger.ok && ledger.rows.map((r) => {
+              const isStatus = r.reason === "status-contradiction";
+              return (
+              <div className={"event" + (isStatus ? " status-slash" : "")} key={r.txHash + r.beneficiary}>
                 <span className="rail" />
                 <div className="body">
                   <div className="line1">
@@ -327,12 +337,14 @@ function LedgerAndGuard() {
                   </div>
                   <div className="line2">
                     <span>block {r.blockNumber}</span>
-                    <span>{r.reason || "divergence"}</span>
+                    {isStatus
+                      ? <span className="reason-tag status" title="market-status contradiction">HALTED-vs-REGULAR · market-status</span>
+                      : <span className="reason-tag price">{r.reason || "price-divergence"}</span>}
                     <a className="txlink" href={OK_TX(r.txHash)} target="_blank" rel="noreferrer">{short(r.txHash)} ↗</a>
                   </div>
                 </div>
               </div>
-            ))}
+            );})}
           </div>
 
           {/* GUARD */}
@@ -371,6 +383,102 @@ function LedgerAndGuard() {
   );
 }
 
+/* ----------------------- DEVELOPER QUICKSTART (CO-S2) ----------------------- */
+const VERITA_ADDR = process.env.NEXT_PUBLIC_VERITA || "";
+const SNIPPET =
+  `require(verita.isTradeable(asset), "unsafe");   // free view — false on stale/halted/split/diverged\n` +
+  `uint256 price = verita.safePrice(asset);         // reverts on unsafe input; charges a per-read fee`;
+
+function Developers() {
+  const [fee, setFee] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    readPerReadFee().then((f) => alive && setFee(f)).catch(() => alive && setFee(null));
+    return () => { alive = false; };
+  }, []);
+
+  async function copy() {
+    try { await navigator.clipboard.writeText(SNIPPET); setCopied(true); setTimeout(() => setCopied(false), 1400); } catch {}
+  }
+
+  return (
+    <section id="developers">
+      <div className="wrap">
+        <div className="shead">
+          <div className="kicker">The primary user is a contract</div>
+          <h2>Integrate in two calls</h2>
+          <p>Ask if the mark is safe, then read the price. One free view, one paid read — that is the entire integration.</p>
+        </div>
+        {VERITA_ADDR && (
+          <div className="dev-addr">
+            <span className="lbl">Verita · X Layer 196</span>
+            <a href={OK_ADDR(VERITA_ADDR)} target="_blank" rel="noreferrer">{VERITA_ADDR} ↗</a>
+          </div>
+        )}
+        <div className="codeblock">
+          <button className="copy" onClick={copy}>{copied ? "copied" : "copy"}</button>
+          <pre>
+            <span className="am">require</span>(verita.<span className="am">isTradeable</span>(asset), <span className="c">&quot;unsafe&quot;</span>);   <span className="c">// free view — false on stale/halted/split/diverged</span>{"\n"}
+            <span className="am">uint256</span> price = verita.<span className="am">safePrice</span>(asset);         <span className="c">// reverts on unsafe input; charges a per-read fee</span>
+          </pre>
+        </div>
+        <div className="dev-fee">
+          <span className="lbl">Per-read fee · live from chain</span>
+          <span className={"val" + (fee ? "" : " loading")}>{fee ?? "reading…"}</span>
+        </div>
+        <details>
+          <summary>Interface &amp; fee detail</summary>
+          <div className="dbody">
+            <code>isTradeable(address) returns (bool)</code> is a free view; <code>safePrice(address) returns (uint256)</code>{" "}
+            reverts on stale/halted/split/diverged input and charges the per-read fee shown above, read live from{" "}
+            <code>perReadFee()</code> and denominated in the deployed settlement token.
+          </div>
+        </details>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------- GUARANTEES (CO-S3) ---------------------------- */
+const GUARANTEES: { claim: string; test: string }[] = [
+  { claim: "One stake can never back two assets.", test: "test_CannotDoubleLockAcrossAssets" },
+  { claim: "Only an authorized reporter can ever trigger a slash.", test: "test_ChallengeRevertsFromNonReporter" },
+  { claim: "A slashed attester keeps whatever free stake wasn't at risk.", test: "test_WithdrawAfterSlash" },
+  { claim: "Each asset's payout beneficiary is set once and can't be hijacked.", test: "test_BeneficiarySetOnce" },
+];
+
+function Guarantees() {
+  return (
+    <section id="guarantees">
+      <div className="wrap">
+        <div className="shead">
+          <div className="kicker">What the contract enforces</div>
+          <h2>Guarantees, each backed by a passing test</h2>
+          <p>Plain-language promises on the surface. The named forge test that proves each one lives behind the expander.</p>
+        </div>
+        <div className="guarantees">
+          {GUARANTEES.map((g) => (
+            <div className="guarantee" key={g.test}>
+              <div className="guarantee-head">
+                <span className="enforced">enforced</span>
+                <span className="claim">{g.claim}</span>
+              </div>
+              <details>
+                <summary>proof</summary>
+                <div className="dbody">
+                  Passing test <code>{g.test}</code> in <code>test/Verita.t.sol</code>.
+                </div>
+              </details>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* -------------------------------- FOOTER ------------------------------- */
 function Footer() {
   return (
@@ -399,6 +507,8 @@ export default function Home() {
         <Registry />
         <Lifecycle />
         <LedgerAndGuard />
+        <Developers />
+        <Guarantees />
       </main>
       <Footer />
     </>

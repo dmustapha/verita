@@ -1,5 +1,5 @@
 // File: web/lib/verita.ts
-import { JsonRpcProvider, Contract, Network } from "ethers";
+import { JsonRpcProvider, Contract, Network, formatUnits } from "ethers";
 const RPC = "https://rpc.xlayer.tech";
 
 // X Layer public RPC chokes on ethers' network auto-detection and on multi-call batches
@@ -16,6 +16,7 @@ export function provider(): JsonRpcProvider {
 
 const ABI = [
   "function isTradeable(address) view returns (bool)",
+  "function perReadFee() view returns (uint256)",
   "function attestations(address) view returns (uint256 price,uint8 status,uint64 timestamp,uint64 expiry,address attester,bool diverged)",
   "function feePot() view returns (uint256)",
   "function stakeOf(address) view returns (uint256)",
@@ -39,3 +40,11 @@ export async function settlementToken(): Promise<{ address: string; decimals: nu
   return _tok;
 }
 export const STATUS = ["UNKNOWN","PRE","REGULAR","POST","OVERNIGHT","CLOSED","HALTED","SPLIT_PENDING","DEPEGGED"];
+
+// The live per-read fee, read from chain and formatted in the actual settlement token (CO-S2 / F-020).
+// perReadFee is a raw token amount (5e14 -> "0.0005 WOKB"); we label it with settlementToken()'s symbol/decimals.
+export async function readPerReadFee(): Promise<string> {
+  const [fee, tok] = await Promise.all([verita().perReadFee() as Promise<bigint>, settlementToken()]);
+  const n = Number(formatUnits(fee, tok.decimals));
+  return `${n.toLocaleString("en-US", { maximumFractionDigits: 6 })} ${tok.symbol}`;
+}

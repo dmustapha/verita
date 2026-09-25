@@ -237,4 +237,45 @@ footer a{color:var(--amber);text-decoration:none}
 .footlink{margin-top:28px}
 .footlink a{color:var(--amber);text-decoration:none;font-weight:500}
 
+/* ---------- LEDGER REASON BADGE (CO-S1) ---------- */
+.reason-tag{font-size:9.5px;letter-spacing:0.09em;text-transform:uppercase;font-weight:600;
+  padding:2px 7px;border-radius:var(--radius-full);display:inline-block;white-space:nowrap}
+.reason-tag.price{color:var(--red);background:var(--red-soft);border:1px solid var(--red-line)}
+.reason-tag.status{color:var(--amber);background:var(--amber-soft);border:1px solid var(--hair-strong)}
+.event.status-slash{background:linear-gradient(90deg,var(--amber-soft),transparent 70%)}
+.event.status-slash .rail{background:var(--amber);box-shadow:0 0 8px rgba(45,212,191,0.5)}
+.ledger-note{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.55}
+.ledger-note b{color:var(--text)}
+
+/* ---------- DEVELOPER QUICKSTART STRIP (CO-S2) ---------- */
+.dev-addr{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:16px;
+  padding:12px 14px;background:var(--s1);border:1px solid var(--hair);border-radius:var(--radius-md);box-shadow:var(--inset)}
+.dev-addr .lbl{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.dev-addr a{font-family:var(--mono);font-size:13px;color:var(--amber);text-decoration:none;word-break:break-all}
+@media(hover:hover){.dev-addr a:hover{color:var(--copper);text-decoration:underline}}
+.dev-fee{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:16px;
+  padding:12px 14px;background:var(--s1);border:1px solid var(--hair);border-radius:var(--radius-md);box-shadow:var(--inset)}
+.dev-fee .lbl{font-size:12.5px;color:var(--muted)}
+.dev-fee .val{font-family:var(--mono);font-weight:600;color:var(--amber);font-variant-numeric:tabular-nums}
+.dev-fee .val.loading{color:var(--faint)}
+
+/* ---------- GUARANTEES STRIP (CO-S3) ---------- */
+.guarantees{display:grid;gap:12px}
+.guarantee{background:var(--s1);border:1px solid var(--hair);border-left:2px solid var(--green);
+  border-radius:var(--radius-md);box-shadow:var(--glow),var(--inset);overflow:hidden;transition:background .16s var(--ease)}
+@media(hover:hover){.guarantee:hover{background:var(--s2)}}
+.guarantee-head{display:flex;align-items:baseline;gap:12px;padding:15px 18px}
+.guarantee .enforced{font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;
+  color:var(--green);background:var(--green-soft);border:1px solid var(--green-line);
+  padding:3px 9px;border-radius:var(--radius-full);white-space:nowrap;flex-shrink:0}
+.guarantee .claim{font-size:14.5px;color:var(--text);font-weight:500}
+.guarantee details{margin:0;border:none;border-top:1px solid var(--hair);border-radius:0;background:transparent}
+
+/* ---------- STATUS-VS-DIVERGED LEGEND (CO-S4) ---------- */
+.legend{margin-top:14px;padding:12px 14px;background:var(--s1);border:1px solid var(--hair);
+  border-radius:var(--radius-md);box-shadow:var(--inset);display:grid;gap:6px}
+.legend p{font-size:12px;color:var(--faint);line-height:1.5}
+.legend p b{color:var(--muted);font-weight:600}
+.legend .close{color:var(--muted)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

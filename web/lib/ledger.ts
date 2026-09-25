@@ -32,7 +32,7 @@ const SLASHED_TOPIC = IFACE.getEvent("Slashed")!.topicHash;
 const KNOWN_SLASHES: { ticker: string; txHash: string }[] = [
   { ticker: "AAPL", txHash: "0x5e19534426d3e5b37ca85ebc2869b03b132546d45cba3ea813de610ea26858f6" },
   { ticker: "SPY",  txHash: "0xa4eae8bf8917715f25db1127ff82a0c54681d93a3d47c747c2aaccbf6dac0e2c" },
-  { ticker: "NVDA", txHash: "0x6f88d59346bd68138b1587ad76cb63c83524f3424bbc0d60ad0297287d4afaa6" },
+  { ticker: "NVDA", txHash: "0x9a1ba59b9cf4b17fe7d8ec2a19b0352284ebcb53eb175c2383326c78fbcf6afc" },
   { ticker: "TSLA", txHash: "0x485a2fd82d0e8ca9f0ed11edf7d8064d3a1bee77f3a090015bb958f9568ae0c0" },
 ];
 
