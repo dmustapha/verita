@@ -40,3 +40,8 @@ WIRE-REPORT.md
 VERIFY-REPORT.md
 .verify-state.json
 VERIFY-OBSERVABLE-EVIDENCE.json
+
+# Stage 4 design-iteration internals (TIER-3, never tracked)
+ai/
+proposals/
+design-variations/
