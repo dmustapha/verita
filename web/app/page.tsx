@@ -446,7 +446,7 @@ const GUARANTEES: { claim: string; test: string }[] = [
   { claim: "One stake can never back two assets.", test: "test_CannotDoubleLockAcrossAssets" },
   { claim: "Only an authorized reporter can ever trigger a slash.", test: "test_ChallengeRevertsFromNonReporter" },
   { claim: "A slashed attester keeps whatever free stake wasn't at risk.", test: "test_WithdrawAfterSlash" },
-  { claim: "Each asset's payout beneficiary is set once and can't be hijacked.", test: "test_BeneficiarySetOnce" },
+  { claim: "Each asset's payout beneficiary is set once and can't be overwritten.", test: "test_BeneficiarySetOnce" },
 ];
 
 function Guarantees() {

@@ -28,7 +28,9 @@ const IFACE = new Interface([
 ]);
 const SLASHED_TOPIC = IFACE.getEvent("Slashed")!.topicHash;
 
-// The real organic-divergence slashes on public X Layer 196 — one per asset (proof: submission/proof.md).
+// The real slashes on public X Layer 196 — one per asset (proof: submission/proof.md).
+// TSLA/SPY/AAPL are price-divergence slashes; NVDA is a market-status contradiction. Each row's
+// reason is decoded live from its receipt below, so the ledger reflects the true on-chain cause.
 const KNOWN_SLASHES: { ticker: string; txHash: string }[] = [
   { ticker: "AAPL", txHash: "0x5e19534426d3e5b37ca85ebc2869b03b132546d45cba3ea813de610ea26858f6" },
   { ticker: "SPY",  txHash: "0xa4eae8bf8917715f25db1127ff82a0c54681d93a3d47c747c2aaccbf6dac0e2c" },
