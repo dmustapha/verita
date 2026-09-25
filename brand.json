@@ -1,0 +1,28 @@
+{
+  "name": "Verita",
+  "tagline": "Staked accountability for tokenized-equity prices — lie about a price, lose your stake.",
+  "colorMode": "dark-only",
+  "brandColor": "#2dd4bf",
+  "ink": ["#07100f", "#0e1a19", "#132322", "#1a2e2c"],
+  "semantic": {
+    "success": "#6bd08a",
+    "warning": "#2dd4bf",
+    "danger": "#ff6a5f"
+  },
+  "fonts": {
+    "display": "Fraunces",
+    "body": "Inter",
+    "mono": "JetBrains Mono"
+  },
+  "radii": { "sm": 6, "md": 11, "lg": 18, "xl": 999 },
+  "shadowPhilosophy": "pure-glow",
+  "signatureElement": "The state-flipping verdict card — hero money-moment card whose accent rail, glow, live mark and quote rule flip teal/green (SAFE) to red (REFUSED) when a mark is rejected on-chain.",
+  "accent": "#2dd4bf",
+  "invariantPhrase": "Lie about a price, lose your stake.",
+  "statusLegend": [
+    { "color": "#6bd08a", "token": "SAFE", "meaning": "Attested mark accepted within band; the guard permits nothing wrongful." },
+    { "color": "#ff6a5f", "token": "REFUSED", "meaning": "Mark rejected as unsafe / diverged / slashed; safePrice() reverts and the stake is slashed to the harmed borrower." },
+    { "color": "#2dd4bf", "token": "ATTENTION", "meaning": "Brand accent: interactive controls, links, the kill-shot, and per-read fee (feePot)." }
+  ],
+  "logoPath": "public/logo.svg"
+}

@@ -45,3 +45,13 @@ VERIFY-OBSERVABLE-EVIDENCE.json
 ai/
 proposals/
 design-variations/
+DESIGN_SYSTEM.md
+.design-forge-state.json
+PERSPECTIVE-design.md
+PERSPECTIVE-design.json
+PERSPECTIVE-design-canary.json
+PERSPECTIVE-RESPONSE-design.rejected.json
+PERSPECTIVE-RESPONSE-design.rejected.diag.txt
+PERSPECTIVE-RESPONSE-design-canary.rejected.json
+PERSPECTIVE-RESPONSE-design-canary.rejected.diag.txt
+web/tsconfig.tsbuildinfo

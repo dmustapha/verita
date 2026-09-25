@@ -1,4 +1,4 @@
-// File: web/app/page.tsx — Verita console (Graphite). Every panel reads live from X Layer 196.
+// File: web/app/page.tsx — Verita console. Every panel reads live from X Layer 196.
 "use client";
 import { useEffect, useState } from "react";
 import { formatUnits } from "ethers";
