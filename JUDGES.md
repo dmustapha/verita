@@ -8,7 +8,7 @@ Verita is a staked, slashable price-and-market-status oracle for tokenized stock
 
 ## 2. The money moment (the kill-shot)
 An attester posted a mark that diverged from an independent signed report. The contract caught it and slashed the whole stake to the borrower.
-- Slash (price-divergence): [`0xa4eae8bf…dac0e2c`](https://www.oklink.com/xlayer/tx/0xa4eae8bf8917715f25db1127ff82a0c54681d93a3d47c747c2aaccbf6dac0e2c)
+- Slash (price-divergence): [`0x485a2f…8ae0c0`](https://www.oklink.com/xlayer/tx/0x485a2fd82d0e8ca9f0ed11edf7d8064d3a1bee77f3a090015bb958f9568ae0c0)
 
 ## 3. The moat (the lie no price feed catches)
 An authorized halt reporter contradicted an attester who kept quoting a halted NVIDIA position as trading normally. Same price, opposite truth about market status. Slashed.
@@ -27,7 +27,7 @@ cast call 0xF3d0E2768F43062b532b3d4bb63c155238FA9176 \
 ```
 git clone https://github.com/dmustapha/verita && cd verita
 forge test          # 32/32, keyless
-bash scripts/verify-claims.sh   # re-resolves the slashes from public 196
+bash scripts/verify-claims.sh   # re-resolves the hero slash from public 196
 ```
 
 ## 6. Integrate it (two calls)
