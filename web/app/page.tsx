@@ -1,4 +1,4 @@
-// File: web/app/page.tsx — Verita console. Every panel reads live from X Layer 196.
+// File: web/app/page.tsx, Verita console. Every panel reads live from X Layer 196.
 "use client";
 import { useEffect, useState } from "react";
 import { formatUnits } from "ethers";
@@ -11,7 +11,7 @@ const BORROWER = process.env.NEXT_PUBLIC_BORROWER_ADDR || "";
 const WTSLAX = process.env.NEXT_PUBLIC_WTSLAX || "";
 const OK_TX = (h: string) => `https://www.oklink.com/xlayer/tx/${h}`;
 const OK_ADDR = (a: string) => `https://www.oklink.com/xlayer/address/${a}`;
-const short = (a: string) => (a ? `${a.slice(0, 6)}…${a.slice(-4)}` : "—");
+const short = (a: string) => (a ? `${a.slice(0, 6)}…${a.slice(-4)}` : "-");
 
 type HeroView = {
   price: string; status: number; diverged: boolean;
@@ -32,7 +32,7 @@ async function loadHero(): Promise<HeroView> {
     tradeable,
     feePot: Number(formatUnits(feePot, tok.decimals)).toFixed(4),
     feeSymbol: tok.symbol,
-    healthBps: healthBps === 0n ? "—" : (Number(healthBps) / 100).toFixed(1) + "%",
+    healthBps: healthBps === 0n ? "-" : (Number(healthBps) / 100).toFixed(1) + "%",
   };
 }
 
@@ -68,7 +68,7 @@ function AppBar() {
       </div>
       <span className="pill"><span className="b" />X Layer · 196</span>
       <span className={"block-tick" + (ticked ? " tick" : "")}>
-        #{block === null ? "—" : block.toLocaleString("en-US").replace(/,/g, "")}
+        #{block === null ? "-" : block.toLocaleString("en-US").replace(/,/g, "")}
       </span>
       <nav className="nav" aria-label="Primary">
         <a href="#console">Console</a>
@@ -134,14 +134,14 @@ function Hero() {
               <summary>What is the &quot;dead verifier&quot;?</summary>
               <div className="dbody">
                 On X Layer, Chainlink&apos;s on-chain <code>VerifierProxy.verify()</code> reverts{" "}
-                <code>VerifierNotFound (0xb151802b)</code> — there is no working on-chain price
+                <code>VerifierNotFound (0xb151802b)</code>, there is no working on-chain price
                 verification. Verita replaces it with a staked attestation plus an EIP-712 signed
                 divergence report, so a lie has a cost and a proof.
               </div>
             </details>
           </div>
 
-          {/* MONEY MOMENT — real reads + real kill-shot tx */}
+          {/* MONEY MOMENT, real reads + real kill-shot tx */}
           <div className="verdict" data-state={refused ? "refused" : "safe"}>
             <div className="v-head">
               <div className="who">Live position · <b>reference asset</b> guarding a borrower</div>
@@ -158,7 +158,7 @@ function Hero() {
 
             {err && !v && (
               <>
-                <p className="v-quote">Can&apos;t reach X Layer 196 right now — the live read isn&apos;t resolving.</p>
+                <p className="v-quote">Can&apos;t reach X Layer 196 right now, the live read isn&apos;t resolving.</p>
                 <details><summary>Technical detail</summary><div className="dbody"><code>{err}</code></div></details>
               </>
             )}
@@ -171,7 +171,7 @@ function Hero() {
                 </div>
                 <p className="v-quote">
                   {refused
-                    ? "Mark rejected as unsafe — the guard refuses to liquidate against it."
+                    ? "Mark rejected as unsafe. The guard refuses to liquidate against it."
                     : "The attested mark is accepted within band. Liquidation permitted only if honest."}
                 </p>
                 <div className="rowline"><span className="lbl">Health factor</span><span className="val">{v.healthBps}</span></div>
@@ -215,7 +215,7 @@ function Registry() {
         <div className="shead">
           <div className="kicker">The record of who lied</div>
           <h2>Attested Asset Registry</h2>
-          <p>Four attesters posted marks on public X Layer. Each row is read live from the contract — every one is currently latched diverged, their permanent track record.</p>
+          <p>Four attesters posted marks on public X Layer. Each row is read live from the contract, every one is currently latched diverged, their permanent track record.</p>
         </div>
         <div className="table-scroll">
           <table>
@@ -235,7 +235,7 @@ function Registry() {
                 <tr key={i}><td colSpan={7}><div className="skeleton" /></td></tr>
               ))}
               {err && !rows && (
-                <tr><td colSpan={7}><div className="empty">Registry read unavailable — X Layer 196 isn&apos;t resolving right now.</div></td></tr>
+                <tr><td colSpan={7}><div className="empty">Registry read unavailable, X Layer 196 isn&apos;t resolving right now.</div></td></tr>
               )}
               {rows && rows.map((r) => (
                 <tr key={r.address}>
@@ -252,9 +252,9 @@ function Registry() {
           </table>
         </div>
         <div className="legend">
-          <p><b>Status</b> — the market state the attester claimed: REGULAR / HALTED / SPLIT_PENDING / DEPEGGED / CLOSED …</p>
-          <p><b>Verdict / Diverged</b> — whether an independent report caught a lie and latched the circuit breaker.</p>
-          <p className="close">These are independent axes. An asset can read <b>REGULAR</b> in Status yet <b>Diverged</b> in Verdict — the attester claimed the market was open, but was caught and slashed.</p>
+          <p><b>Status</b>, the market state the attester claimed: REGULAR / HALTED / SPLIT_PENDING / DEPEGGED / CLOSED …</p>
+          <p><b>Verdict / Diverged</b>, whether an independent report caught a lie and latched the circuit breaker.</p>
+          <p className="close">These are independent axes. An asset can read <b>REGULAR</b> in Status yet <b>Diverged</b> in Verdict, the attester claimed the market was open, but was caught and slashed.</p>
         </div>
       </div>
     </section>
@@ -291,15 +291,15 @@ function Lifecycle() {
 function LedgerAndGuard() {
   const [ledger, setLedger] = useState<LedgerResult | null>(null);
   const [hf, setHf] = useState<string | null>(null);
-  const guardUnset = hf === "—";
+  const guardUnset = hf === "-";
 
   useEffect(() => {
     let alive = true;
     readLedger().then((r) => alive && setLedger(r)).catch(() => alive && setLedger({ ok: false, error: "getLogs failed" }));
     const readHf = () =>
       readHealthBps(BORROWER)
-        .then((b) => alive && setHf(b === 0n ? "—" : (Number(b) / 100).toFixed(2)))
-        .catch(() => alive && setHf("—"));
+        .then((b) => alive && setHf(b === 0n ? "-" : (Number(b) / 100).toFixed(2)))
+        .catch(() => alive && setHf("-"));
     readHf();
     const t = setInterval(readHf, 5000);
     return () => { alive = false; clearInterval(t); };
@@ -308,7 +308,7 @@ function LedgerAndGuard() {
   const moved =
     ledger && ledger.ok
       ? ledger.rows.reduce((s, r) => s + Number(r.amount), 0).toFixed(3) + " " + (ledger.rows[0]?.symbol || "WOKB")
-      : "—";
+      : "-";
 
   return (
     <section id="ledger">
@@ -317,7 +317,7 @@ function LedgerAndGuard() {
           <div className="kicker">Money moved · block by block</div>
           <h2>Stake / Slash Ledger &amp; live guard</h2>
           <p>Left: every slash the contract emitted, paid to the harmed borrower. Right: the consumer reading the mark to compute health.</p>
-          <p className="ledger-note">A slash can be triggered by a <b>price lie</b> (a mark that diverges past the band) <b>or a market-status lie</b> — a halt, split or de-peg that no price feed can carry. Each row&apos;s reason is decoded live from its receipt.</p>
+          <p className="ledger-note">A slash can be triggered by a <b>price lie</b> (a mark that diverges past the band) <b>or a market-status lie</b>, a halt, split or de-peg that no price feed can carry. Each row&apos;s reason is decoded live from its receipt.</p>
         </div>
         <div className="split">
           {/* LEDGER */}
@@ -366,19 +366,19 @@ function LedgerAndGuard() {
                 <span className="c">// consumer reads the mark to compute health</span>{"\n"}
                 mark = Verita.<span className="am">safePrice</span>(asset){"\n"}
                 {guardUnset
-                  ? <><span className="err">→ no live guard consumer on mainnet</span>{"\n"}health = <span className="am">—</span></>
+                  ? <><span className="err">→ no live guard consumer on mainnet</span>{"\n"}health = <span className="am">-</span></>
                   : <><span className="ok">→ within band</span>{"\n"}health = collateral / debt = <span className="am">{hf}</span></>}
               </div>
               <div className="guard-note">
                 {guardUnset
-                  ? "No live guard consumer is deployed on mainnet, so health reads back empty here. The guard is proven on a fork and in the test suite — the contract-level safePrice() read is real."
+                  ? "No live guard consumer is deployed on mainnet, so health reads back empty here. The guard is proven on a fork and in the test suite, the contract-level safePrice() read is real."
                   : "Honest mark, healthy borrower. The guard permits nothing wrongful."}
               </div>
               <details>
                 <summary>What happens when it diverges?</summary>
                 <div className="dbody">
                   <code>safePrice()</code> reverts <code>Diverged</code> once the circuit-breaker latches. The
-                  guard can no longer read a usable price, so it <b>refuses</b> to liquidate — the borrower is
+                  guard can no longer read a usable price, so it <b>refuses</b> to liquidate, the borrower is
                   protected and the stake is already slashed to them.
                 </div>
               </details>
@@ -393,7 +393,7 @@ function LedgerAndGuard() {
 /* ----------------------- DEVELOPER QUICKSTART (CO-S2) ----------------------- */
 const VERITA_ADDR = process.env.NEXT_PUBLIC_VERITA || "";
 const SNIPPET =
-  `require(verita.isTradeable(asset), "unsafe");   // free view — false on stale/halted/split/diverged\n` +
+  `require(verita.isTradeable(asset), "unsafe");   // free view, false on stale/halted/split/diverged\n` +
   `uint256 price = verita.safePrice(asset);         // reverts on unsafe input; charges a per-read fee`;
 
 function Developers() {
@@ -416,7 +416,7 @@ function Developers() {
         <div className="shead">
           <div className="kicker">The primary user is a contract</div>
           <h2>Integrate in two calls</h2>
-          <p>Ask if the mark is safe, then read the price. One free view, one paid read — that is the entire integration.</p>
+          <p>Ask if the mark is safe, then read the price. One free view, one paid read, that is the entire integration.</p>
         </div>
         {VERITA_ADDR && (
           <div className="dev-addr">
@@ -427,7 +427,7 @@ function Developers() {
         <div className="codeblock">
           <button className="copy" onClick={copy}>{copied ? "copied" : "copy"}</button>
           <pre>
-            <span className="am">require</span>(verita.<span className="am">isTradeable</span>(asset), <span className="c">&quot;unsafe&quot;</span>);   <span className="c">// free view — false on stale/halted/split/diverged</span>{"\n"}
+            <span className="am">require</span>(verita.<span className="am">isTradeable</span>(asset), <span className="c">&quot;unsafe&quot;</span>);   <span className="c">// free view, false on stale/halted/split/diverged</span>{"\n"}
             <span className="am">uint256</span> price = verita.<span className="am">safePrice</span>(asset);         <span className="c">// reverts on unsafe input; charges a per-read fee</span>
           </pre>
         </div>
@@ -493,7 +493,7 @@ function Footer() {
       <div className="wrap">
         <div className="disc">
           Live console. The registry, ledger, hero position and guard all read <b>real on-chain data</b> from
-          X Layer 196. The kill-shot fires a <b>real</b> challenge transaction — it can only slash when the
+          X Layer 196. The kill-shot fires a <b>real</b> challenge transaction, it can only slash when the
           contract independently confirms divergence.
         </div>
         <div className="frow">

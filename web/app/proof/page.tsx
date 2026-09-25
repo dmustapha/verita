@@ -1,4 +1,4 @@
-// File: web/app/proof/page.tsx — Graphite restyle. Addresses + re-resolve commands unchanged.
+// File: web/app/proof/page.tsx Graphite restyle. Addresses + re-resolve commands unchanged.
 const V = process.env.NEXT_PUBLIC_VERITA || "";
 const G = process.env.NEXT_PUBLIC_GUARD || "";
 // USDG is the designed-for settlement token; the live mainnet proof settled in WOKB (AMEND-3).
@@ -23,7 +23,7 @@ function KV({ label, a, span, dead }: { label: string; a: string; span?: boolean
 export default function Proof() {
   const reResolve =
 `cast logs --address ${V || "<VERITA>"} "Slashed(address,address,address,uint256,string)" --rpc-url https://rpc.xlayer.tech
-# settlement token is a constructor param — read it from the contract, then confirm the borrower received the slash:
+# settlement token is a constructor param, read it from the contract, then confirm the borrower received the slash:
 TOKEN=$(cast call ${V || "<VERITA>"} "USDG()(address)" --rpc-url https://rpc.xlayer.tech)
 cast call $TOKEN "balanceOf(address)(uint256)" <BORROWER> --rpc-url https://rpc.xlayer.tech`;
 
@@ -40,14 +40,14 @@ cast call $TOKEN "balanceOf(address)(uint256)" <BORROWER> --rpc-url https://rpc.
             <div className="shead">
               <div className="kicker">Verify it yourself · none of our infrastructure involved</div>
               <h2>On-chain proof</h2>
-              <p>Every address and slash is public on X Layer 196. Re-resolve the slash straight from the contract — no Verita server in the loop.</p>
+              <p>Every address and slash is public on X Layer 196. Re-resolve the slash straight from the contract, with no Verita server in the loop.</p>
             </div>
 
             <div className="proof-grid">
               <KV label="Verita contract" a={V} />
               <KV label="LiquidationGuard" a={G} />
-              <KV label="WOKB — live settlement token (18 dec)" a={WOKB} />
-              <KV label="USDG — designed-for settlement token (6 dec)" a={USDG} />
+              <KV label="WOKB (live settlement token, 18 dec)" a={WOKB} />
+              <KV label="USDG (designed-for settlement token, 6 dec)" a={USDG} />
               <KV label="wTSLAx" a={WTSLAX} />
               <KV label="Dead Chainlink verifier Verita replaces · VerifierProxy" a={DEAD} span dead />
             </div>
@@ -61,7 +61,7 @@ cast call $TOKEN "balanceOf(address)(uint256)" <BORROWER> --rpc-url https://rpc.
               <div className="dbody">
                 The settlement token is a constructor param. The command reads <code>USDG()</code> from the
                 contract to get the actual token, so the borrower&apos;s balance check is never pointed at the
-                wrong asset. The dead verifier <code>{DEAD}</code> reverts <code>VerifierNotFound (0xb151802b)</code> —
+                wrong asset. The dead verifier <code>{DEAD}</code> reverts <code>VerifierNotFound (0xb151802b)</code>:
                 Verita never calls it.
               </div>
             </details>
