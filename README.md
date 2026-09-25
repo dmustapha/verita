@@ -5,10 +5,10 @@
 > Lie about a price, lose your stake.
 
 ![X Layer](https://img.shields.io/badge/X%20Layer-chainId%20196-2dd4bf)
-![Tests](https://img.shields.io/badge/forge%20tests-14%2F14-6bd08a)
+![Tests](https://img.shields.io/badge/forge%20tests-32%2F32-6bd08a)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-**Live console:** https://verita-phi-rouge.vercel.app
+**Live console:** https://verita-xlayer.vercel.app
 **Verita on X Layer 196:** [`0xF3d0E2768F43062b532b3d4bb63c155238FA9176`](https://www.oklink.com/x-layer/address/0xF3d0E2768F43062b532b3d4bb63c155238FA9176)
 
 ![Verita console](docs/images/landing.png)
@@ -153,7 +153,7 @@ The console reads live X Layer 196 in the browser. The kill-shot button signs a 
 
 ## Tests
 
-- **Contracts:** `forge test` runs 14 tests covering attestation, staking locks, the two slash paths (price divergence and status contradiction), read refusal, and the consumer refuse-to-liquidate path.
+- **Contracts:** `forge test` runs 32 tests covering every external function and all 13 custom error paths: attestation and staking locks, read refusal (halt/stale/diverged/no-attestation), both slash paths (price divergence and status contradiction), challenge guards (non-reporter, within-band, bad asset, replay, no attestation), owner-only config, beneficiary set-once and payout, fee accounting, and the consumer guard (borrow, repay, health factor, undercollateralized, refuse-on-halt, healthy-safe, underwater seize). See [CERTIFICATION.md](CERTIFICATION.md) for the full feature-to-test matrix.
 - **Design system:** `cd web && npm test` runs 35 checks (token drift, forbidden defaults, contrast >= 4.5:1, brand and CSS parity).
 
 ## Tech stack
@@ -167,6 +167,7 @@ Solidity 0.8.24 and Foundry for the primitive and the reference consumer. A Node
 - [LIMITATIONS.md](LIMITATIONS.md) scope boundaries and the WOKB/USDG settlement note
 - [DECISIONS.md](DECISIONS.md) architecture decision records
 - [SUBMISSION_STATUS.md](SUBMISSION_STATUS.md) what works, what is fork-only, and why
+- [CERTIFICATION.md](CERTIFICATION.md) every feature mapped to its passing test or live tx
 
 ## License
 
