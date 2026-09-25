@@ -58,3 +58,11 @@ web/tsconfig.tsbuildinfo
 .ship-check.json
 .deploy-state.json
 web/.env.local.bak.*
+
+# Livetest internal artifacts
+LIVETEST-REPORT.md
+LIVETEST-V2-REPORT.md
+LIVETEST-V3-REPORT.md
+.livetest-state.json
+screenshots/
+TESTING-PLAN.md
