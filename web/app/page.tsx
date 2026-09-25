@@ -127,7 +127,7 @@ function Hero() {
             <div className="chips">
               <span className="chip">Min stake <b>0.005 WOKB</b></span>
               <span className="chip">Divergence band <b>0.50%</b></span>
-              <span className="chip">Max price age <b>300s</b></span>
+              <span className="chip">Max price age <b>1 day</b></span>
               <span className="chip">Fills the gap where <b>Chainlink&apos;s verifier is dead</b></span>
             </div>
             <details>
@@ -277,7 +277,7 @@ function Lifecycle() {
         </div>
         <div className="pipe">
           <div className="step"><div className="n">01</div><h4>Stake</h4><p>Attester locks 0.005 WOKB as collateral behind a specific asset mark.</p>{ARROW}</div>
-          <div className="step"><div className="n">02</div><h4>Attest</h4><p>Posts a signed price + market status on-chain, valid for 300 seconds.</p>{ARROW}</div>
+          <div className="step"><div className="n">02</div><h4>Attest</h4><p>Posts a signed price + market status on-chain, valid for up to a day.</p>{ARROW}</div>
           <div className="step"><div className="n">03</div><h4>Read</h4><p>The liquidation guard reads the mark every block to compute health.</p>{ARROW}</div>
           <div className="step"><div className="n">04</div><h4>Challenge</h4><p>An independent reporter signs an EIP-712 report proving over 0.50% divergence.</p>{ARROW}</div>
           <div className="step slash"><div className="n">05</div><h4>Slash</h4><p>Wrongful liquidation refused; the stake moves to the harmed borrower.</p></div>
