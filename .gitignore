@@ -74,3 +74,13 @@ TESTING-PLAN.md
 DEMO-SCRIPT.md
 DEMO-FOOTGUNS.md
 .demo-rehearsal-state.json
+video/verification.json
+video/out/
+video/clips/
+*.mp4
+*.webm
+*.mov
+
+# demo production tooling (internal — not a judge surface)
+video/
+.demo-state.json

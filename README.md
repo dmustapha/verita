@@ -9,7 +9,9 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 **Live console:** https://verita-xlayer.vercel.app
+**Demo + launch thread:** https://x.com/capitanoo23/status/2103613894870839439
 **Verita on X Layer 196:** [`0xF3d0E2768F43062b532b3d4bb63c155238FA9176`](https://www.oklink.com/x-layer/address/0xF3d0E2768F43062b532b3d4bb63c155238FA9176)
+**Judges:** start at [JUDGES.md](JUDGES.md) for the 2-minute path.
 
 ![Verita console](docs/images/landing.png)
 
