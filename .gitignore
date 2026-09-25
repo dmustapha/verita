@@ -35,3 +35,8 @@ docs/pipeline/
 # wire internal artifacts
 WIRE-REPORT.md
 .wire-state.json
+
+# verify_milestone internal artifacts
+VERIFY-REPORT.md
+.verify-state.json
+VERIFY-OBSERVABLE-EVIDENCE.json
