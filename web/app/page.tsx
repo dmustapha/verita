@@ -128,7 +128,7 @@ function Hero() {
               <span className="chip">Min stake <b>0.005 WOKB</b></span>
               <span className="chip">Divergence band <b>0.50%</b></span>
               <span className="chip">Max price age <b>1 day</b></span>
-              <span className="chip">Fills the gap where <b>Chainlink&apos;s verifier is dead</b></span>
+              <span className="chip">Fills the gap where <b>the chain&apos;s price verifier is dead</b></span>
             </div>
             <details>
               <summary>What is the &quot;dead verifier&quot;?</summary>
