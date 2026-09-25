@@ -51,7 +51,10 @@ export async function POST() {
   if (now - lastCall < 30_000) return NextResponse.json({ error: "rate limited — wait 30s between kill-shots" }, { status: 429 });
   lastCall = now;
   try {
-    const asset = process.env.NEXT_PUBLIC_WTSLAX;
+    // Target asset: a RUNTIME server var (KILLSHOT_ASSET) takes precedence over the build-inlined
+    // NEXT_PUBLIC_WTSLAX, so the demo target can be re-pointed without a rebuild (NEXT_PUBLIC_* is frozen
+    // at build time, which would otherwise silently fire on a stale asset).
+    const asset = process.env.KILLSHOT_ASSET || process.env.NEXT_PUBLIC_WTSLAX;
     if (!process.env.RELAYER_PK || !process.env.REPORTER_PK || !process.env.NEXT_PUBLIC_VERITA || !asset) {
       return NextResponse.json({ error: "kill-shot not configured on this host (missing relayer/reporter key or target asset)" }, { status: 503 });
     }
